@@ -1,5 +1,15 @@
 import torch
 from torch import Tensor
+from typing import Optional, List
+
+def _max_by_axis(the_list):
+    # type: (List[List[int]]) -> List[int]
+    maxes = the_list[0]
+    for sublist in the_list[1:]:
+        for index, item in enumerate(sublist):
+            maxes[index] = max(maxes[index], item)
+    return maxes
+
 
 def nested_tensor_from_tensor_list(tensor_list: List[Tensor], size_divisibility: int = 0):
     # TODO make this more general
@@ -70,4 +80,7 @@ class NestedTensor(object):
     def __repr__(self):
         return str(self.tensors)
 
-
+if __name__ == '__main__':
+    test_list = [torch.empty(2,3), torch.empty(3,4), torch.empty(1,5)]
+    nested_tensor = nested_tensor_from_tensor_list(test_list)
+    print(nested_tensor.tensors.shape)
